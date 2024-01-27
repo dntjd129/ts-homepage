@@ -1,9 +1,9 @@
-import { Reset } from "styled-reset";
+import NaverMap from "./components/NaverMap";
 
 function App() {
   return (
     <>
-      <Reset />
+      <NaverMap />
     </>
   );
 }
