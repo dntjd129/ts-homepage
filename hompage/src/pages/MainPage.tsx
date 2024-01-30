@@ -1,14 +1,15 @@
+import KakaoMap from "../components/KakaoMap";
+import KakaoOne from "../components/KakaoOne";
+import MapContainer from "../components/KakaoTest";
+import { MainPageLayout } from "./MainStyle";
 function MainPage() {
   return (
     <>
-      <div>요하이요하이요하이여ㅛㅇ</div>
-      <ul>
-        <li>1</li>
-        <li>2</li>
-        <li>3</li>
-        <li>4</li>
-        <li>5</li>
-      </ul>
+      <MainPageLayout>
+        {/* <KakaoMap /> */}
+        <MapContainer />
+        <KakaoOne />
+      </MainPageLayout>
     </>
   );
 }
