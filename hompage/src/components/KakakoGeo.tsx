@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
+import styled from "styled-components";
 
 // 상태 타입 정의
 interface State {
@@ -12,7 +13,11 @@ interface State {
 }
 
 function KakaoGeo() {
-  const [marker, setMarker] = useState<boolean>(false);
+  const [markerPosition, setMarkerPosition] = useState({
+    lat: 33.450701,
+    lng: 126.570667,
+  });
+
   const [state, setState] = useState<State>({
     center: {
       lat: 33.450701,
@@ -22,18 +27,22 @@ function KakaoGeo() {
     isLoading: true,
   });
 
+  const [map, setMap] = useState<kakao.maps.Map | null>(null); // 지도 객체를 관리하는 상태
+
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
+          const newPos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
           setState((prev) => ({
             ...prev,
-            center: {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-            },
+            center: newPos,
             isLoading: false,
           }));
+          setMarkerPosition(newPos);
         },
         (err) => {
           setState((prev) => ({
@@ -46,48 +55,61 @@ function KakaoGeo() {
     } else {
       setState((prev) => ({
         ...prev,
-        errMsg: "geolocation을 사용할수 없어요..",
+        errMsg: "Geolocation is not supported by this browser.",
         isLoading: false,
       }));
     }
   }, []);
 
+  const moveToCurrentLocation = () => {
+    if (navigator.geolocation && map) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          map.setCenter(new kakao.maps.LatLng(lat, lng));
+        },
+        (error) => {
+          console.error("Geolocation failed: ", error);
+        }
+      );
+    } else {
+      alert("이 브라우저에서는 Geolocation이 지원되지 않습니다.");
+    }
+  };
+
   return (
     <>
       <Map
         center={state.center}
-        style={{
-          width: "100%",
-          height: "450px",
-        }}
+        style={{ width: "500px", height: "450px" }}
         level={3}
+        onCreate={setMap} // Map 컴포넌트가 생성될 때 지도 객체를 상태에 저장
       >
         {!state.isLoading && (
           <MapMarker
-            position={state.center}
+            position={markerPosition}
             image={{
-              src: marker ? "/map_PinSelected.png" : "/map_Pin.png",
+              src: "/map_Pin.png",
               size: {
-                width: 14,
-                height: 16,
+                width: 24,
+                height: 35,
               },
-              // options: {
-              //   offset: {
-              //     x: 27,
-              //     y: 69,
-              //   }, // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-              // },
             }}
-            onClick={() => setMarker(!marker)}
           >
-            <div style={{ padding: "5px", color: "#000" }}>
-              {state.errMsg ? state.errMsg : "내위치다"}
-            </div>
+            <MarkerTextBox>
+              {state.errMsg ? state.errMsg : "내 위치"}
+            </MarkerTextBox>
           </MapMarker>
         )}
       </Map>
+      <button onClick={moveToCurrentLocation}>내 위치로</button>
     </>
   );
 }
+
+const MarkerTextBox = styled.div`
+  padding: 4px;
+`;
 
 export default KakaoGeo;

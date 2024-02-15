@@ -5,6 +5,7 @@ import KakaoMap from "../components/KakaoMap";
 import KakaoOne from "../components/KakaoOne";
 import KakaoSdk from "../components/KakaoSdk";
 import MapContainer from "../components/KakaoTest";
+import SetBounds from "../components/NaverMap";
 import { MainPageLayout } from "./MainStyle";
 function MainPage() {
   return (
@@ -15,6 +16,7 @@ function MainPage() {
         {/* <KakaoLocation /> */}
         {/* <KakaoLoc /> */}
         {/* <KakaoSdk /> */}
+        {/* <SetBounds /> */}
         <KakaoGeo />
       </MainPageLayout>
     </>

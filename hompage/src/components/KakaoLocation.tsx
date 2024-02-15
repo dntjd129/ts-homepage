@@ -72,7 +72,7 @@ export default function KakaoLocation() {
 
   return (
     <div>
-      <div id="map" style={{ width: "100%", height: "700px" }}></div>
+      <div id="map" style={{ width: "500px", height: "700px" }}></div>
       <br />
       <button onClick={getCurrentPosBtn}>현재위치로</button>
       <br />
