@@ -1,5 +1,5 @@
 import KakaoMap from "./components/KakaoMap";
-import NaverMap from "./components/NaverMap";
+// import NaverMap from "./components/NaverMap";
 import { Reset } from "styled-reset";
 import MainPage from "./pages/MainPage";
 import styled from "styled-components";
